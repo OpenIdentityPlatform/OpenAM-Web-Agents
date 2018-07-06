@@ -23,9 +23,9 @@ HTTPD22_VERSION=2.2.34
 APR_VERSION=1.6.3
 APR_UTIL_VERSION=1.6.1
 
-ifndef 32
- 64 := 1
-endif
+#ifndef 32
+64 := 1
+#endif
 
 # DEBUG=1
 
