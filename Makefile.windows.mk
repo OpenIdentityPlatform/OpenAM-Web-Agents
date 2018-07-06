@@ -38,7 +38,7 @@ $(IIS_OUT_OBJS): COMPILEOPTS += /TP
 $(TEST_OBJECTS): CFLAGS += /D HAVE_MSVC_THREAD_LOCAL_STORAGE /D HAVE__SNPRINTF_S /D HAVE__VSNPRINTF_S /D UNIT_TESTING_DEBUG=1
 
 ifneq ($(findstring $(MAKECMDGOALS), iis32 iis64 iiszip),)
-LIB64ENV := $(shell echo $(LIBPATH) | findstr amd64)
+LIB64ENV := $(shell echo "$(LIBPATH)" | findstr amd64)
 
 ifeq (,$(LIB64ENV))
 $(error Missing support for 64 build environment)
