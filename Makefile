@@ -24,7 +24,7 @@ APR_VERSION=1.6.3
 APR_UTIL_VERSION=1.6.1
 
 ifndef 32
- 64=1
+ 64 := 1
 endif
 
 # DEBUG=1
