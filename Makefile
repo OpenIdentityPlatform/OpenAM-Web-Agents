@@ -18,7 +18,17 @@
 #  64=1 builds 64bit binary
 #  DEBUG=1 builds debug binary version
 
-64=1
+HTTPD24_VERSION=2.4.33
+HTTPD22_VERSION=2.2.34
+APR_VERSION=1.6.3
+APR_UTIL_VERSION=1.6.1
+
+ifdef 32
+ 
+else
+ 64=1
+endif
+
 # DEBUG=1
 
 VERSION := 4.1.0
@@ -30,7 +40,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  SED := cmd /c sed.exe
  ECHO := cmd /c echo
  MKDIR := cmd /c mkdir
- CP := cmd /c copy /Y
+ CP := cmd /c copy /E /Y
  CD := cd
  EXEC := 
  REVISION := Revision: $(shell git rev-parse --short HEAD)
@@ -41,6 +51,9 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  COMPILEFLAG=/
  COMPILEOPTS=/Fd$@.pdb /Fo$(dir $@)
  OBJ=obj
+ UTAR=7z x
+ UBZIP=7z x
+ WGET=powershell /c Invoke-WebRequest
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -49,7 +62,7 @@ else
  SED := sed
  ECHO := echo
  MKDIR := mkdir -p
- CP := cp
+ CP := cp -r
  CD := cd
  EXEC := ./
  REVISION := Revision: $(shell git rev-parse --short HEAD)
@@ -60,6 +73,9 @@ else
  COMPILEFLAG=-
  COMPILEOPTS=-c -o $@
  OBJ=o
+ UTAR=tar xf
+ UBZIP=bunzip2
+ WGET=wget
 endif
 
 SED_ROPT := r
@@ -74,7 +90,9 @@ endif
 PS=$(strip $(PATHSEP))
 
 CFLAGS := $(COMPILEFLAG)I.$(PS)source $(COMPILEFLAG)I.$(PS)zlib $(COMPILEFLAG)I.$(PS)expat $(COMPILEFLAG)I.$(PS)pcre \
-	  $(COMPILEFLAG)DHAVE_EXPAT_CONFIG_H $(COMPILEFLAG)DHAVE_PCRE_CONFIG_H $(COMPILEFLAG)DAM_BINARY_LICENSE
+	  $(COMPILEFLAG)DHAVE_EXPAT_CONFIG_H $(COMPILEFLAG)DHAVE_PCRE_CONFIG_H
+
+DIR := ${CURDIR}
 OBJDIR := build
 
 APACHE_SOURCES := source/apache/agent.c
@@ -111,13 +129,15 @@ TEST_SOURCES := $(wildcard cmocka/*.c) $(wildcard tests/*.c)
 TEST_OBJECTS := $(addprefix $(OBJDIR)/,$(TEST_SOURCES:.c=.$(OBJ)))
 
 $(APACHE_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)$(OS_MARCH)/apache24/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)/apache24/include $(COMPILEFLAG)DAPACHE2 $(COMPILEFLAG)DAPACHE24
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr/include \
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr-util/include \
+        $(COMPILEFLAG)DAPACHE2 $(COMPILEFLAG)DAPACHE24
 $(VARNISH_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)/varnish/include
 $(VARNISH3_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)/varnish3/include
 $(APACHE22_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)$(OS_MARCH)/apache22/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)/apache22$(VENDOR_EXT)/include $(COMPILEFLAG)DAPACHE2
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr/include \
+        $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr-util/include \
+	 $(COMPILEFLAG)DAPACHE2
 $(TEST_OBJECTS): CFLAGS += $(COMPILEFLAG)I.$(PS)cmocka $(COMPILEFLAG)I.$(PS)tests $(COMPILEFLAG)I.$(PS)$(OBJDIR)$(PS)tests \
 	$(COMPILEFLAG)DHAVE_SIGNAL_H $(COMPILEFLAG)DUNIT_TEST
 
@@ -195,9 +215,32 @@ test_includes:
 	$(ECHO) "};" >> $(OBJDIR)$(PS)tests$(PS)tests.h
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
+apr:
+	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2
+	-$(UBZIP) apr-${APR_VERSION}.tar.bz2; $(UTAR) apr-${APR_VERSION}.tar
+	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2
+	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2; $(UTAR) apr-util-${APR_UTIL_VERSION}.tar
+apache-src: apr
+	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
+	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD24_VERSION}.tar
+	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
+	-$(CP) httpd-${HTTPD24_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24
+	-$(CP) apr-${APR_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr
+	-$(CP) apr-util-${APR_UTIL_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr-util
+	-$(RMALL) httpd-* apr-*
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24; ./configure --with-included-apr
+apache22-src: apr
+	-$(WGET) https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
+	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD22_VERSION}.tar
+	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
+	-$(CP) httpd-${HTTPD22_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22
+	-$(CP) apr-${APR_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr
+	-$(CP) apr-util-${APR_UTIL_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr-util
+	-$(RMALL) httpd-* apr-*
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; ./configure --with-included-apr
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
-apachezip: clean build version apache agentadmin
+apachezip: clean build version apache-src apache agentadmin
 	@$(ECHO) "[***** Building Apache 2.4 agent archive *****]"
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents$(PS)apache24_agent
@@ -223,7 +266,7 @@ apache22_post:
 
 apache22zip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.2.x"'
 apache22zip: CONTAINER = $(strip Apache 2.2 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
-apache22zip: clean build version apache22 agentadmin
+apache22zip: clean build version apache22-src apache22 agentadmin
 	@$(ECHO) "[***** Building Apache 2.2 agent archive *****]"
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents$(PS)apache22_agent
