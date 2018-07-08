@@ -71,7 +71,7 @@ else
  CFLAGS += /MT
 endif
 
-CC32 :=cmd /c $(CC32)
+CC32 :="$(CC32)"
 	
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
