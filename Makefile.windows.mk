@@ -13,6 +13,7 @@
 #
 # Copyright 2014 - 2016 ForgeRock AS.
 #
+SHELL := /bin/bash
 
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
@@ -127,7 +128,7 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 
 $(OBJDIR)/64/%.$(OBJ): %.c
 	@$(ECHO) "[*** Compiling "$<" ***]"
-	$(shell powershell '$(CC) $(CFLAGS) $< $(COMPILEOPTS)')
+	$(CC) $(CFLAGS) $< $(COMPILEOPTS)
 
 OUT_OBJS_64 := $(addprefix $(OBJDIR)/64/,$(SOURCES:.c=.$(OBJ)))
 IIS_OUT_OBJS_64 := $(addprefix $(OBJDIR)/64/,$(IIS_SOURCES:.c=.$(OBJ)))
