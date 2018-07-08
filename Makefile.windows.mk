@@ -42,7 +42,7 @@ ifneq ($(findstring $(MAKECMDGOALS), iis32 iis64 iiszip),)
 LIB64ENV := $(shell echo "$(LIBPATH)" | findstr amd64)
 
 ifeq (,$(LIB64ENV))
-$(error Missing support for 64 build environment)
+#$(error Missing support for 64 build environment)
 endif
 
 ifeq (,$(CC32))
