@@ -17,11 +17,11 @@
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
 
-CC32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')
+CC32 := "$(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')"
 CC = cl
-LINK32 := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')
-LIB32_VC := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')
-LIB32_SDK := $(shell powershell 'Get-ChildItem "$(WindowsSdkDir)" -recurse | Where-Object {$$_.PSIsContainer -eq $$true -and $$_.Name -eq "um"} | Select-Object -Index 1 | Select-Object -Expand FullName')
+LINK32 := "$(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')"
+LIB32_VC := "$(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')"
+LIB32_SDK := "$(shell powershell 'Get-ChildItem "$(WindowsSdkDir)" -recurse | Where-Object {$$_.PSIsContainer -eq $$true -and $$_.Name -eq "um"} | Select-Object -Index 1 | Select-Object -Expand FullName')"
 LINK = link
 RC = rc
 SHARED = /DLL
@@ -45,13 +45,13 @@ $(error Missing support for 64 build environment)
 endif
 
 ifeq (,$(CC32))
-CC32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\cl.exe
+CC32 := "$(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\cl.exe"
 endif
 ifeq (,$(LINK32))
-LINK32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe
+LINK32 := "$(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe"
 endif
 ifeq (,$(LIB32_VC))
-LIB32_VC := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent | split-path -parent')
+LIB32_VC := "$(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent | split-path -parent')"
 endif
 
 else
