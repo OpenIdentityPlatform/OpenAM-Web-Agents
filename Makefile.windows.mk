@@ -127,8 +127,7 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 
 $(OBJDIR)/64/%.$(OBJ): %.c
 	@$(ECHO) "[*** Compiling "$<" ***]"
-	SHELL=C:\Windows\system32\cmd.exe
-	$(CC) $(CFLAGS) $< $(COMPILEOPTS)
+	$(shell powershell '$(CC) $(CFLAGS) $< $(COMPILEOPTS)')
 
 OUT_OBJS_64 := $(addprefix $(OBJDIR)/64/,$(SOURCES:.c=.$(OBJ)))
 IIS_OUT_OBJS_64 := $(addprefix $(OBJDIR)/64/,$(IIS_SOURCES:.c=.$(OBJ)))
