@@ -18,7 +18,7 @@ SHELL := /bin/bash
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
 
-CC32 := cmd /c $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')
+CC32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')
 CC = cl
 LINK32 := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition')
 LIB32_VC := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -ne "" -and $$_.Definition -notlike "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')
@@ -70,6 +70,8 @@ ifdef DEBUG
 else
  CFLAGS += /MT
 endif
+
+CC32 :=cmd /c $(CC32)
 	
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
