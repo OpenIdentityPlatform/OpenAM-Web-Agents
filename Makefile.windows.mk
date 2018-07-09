@@ -58,13 +58,12 @@ else
 ifdef 64
  LDFLAGS += /MACHINE:X64
  OS_MARCH := _64
- "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 else
  LDFLAGS += /MACHINE:X86
  OS_MARCH :=
- "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 endif
 endif
+
 
 ifdef DEBUG
  CFLAGS += /MTd /D _DEBUG /D DEBUG
@@ -72,8 +71,11 @@ else
  CFLAGS += /MT
 endif
 
-CC32 := cl
-LINK32 :=link
+echo "$(CC)"
+echo "$(CC32)"
+echo "$(shell cygpath -u $(CC32))"
+#CC32 := cl
+#LINK32 :=link
 	
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
