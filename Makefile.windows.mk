@@ -73,7 +73,7 @@ endif
 
 #CC32 := cl
 #LINK32 :=link
-CC:=cmd /c $(CC)
+CC32:=cmd /c $(CC32)
 
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
