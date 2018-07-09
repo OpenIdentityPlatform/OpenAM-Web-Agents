@@ -70,8 +70,8 @@ else
  CFLAGS += /MT
 endif
 
-CC32 := $(cygpath -u "${CC32}")
-LINK32 :=$(cygpath -u "${LINK32}")
+CC32 := $(cygpath -u "$(CC32)")
+LINK32 :=$(cygpath -u "$(LINK32)")
 	
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
