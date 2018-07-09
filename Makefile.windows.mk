@@ -73,7 +73,8 @@ endif
 
 #CC32 := cl
 #LINK32 :=link
-CC32:="$(shell cygpath "$(CC32)")" 
+#CC32:="$(shell cygpath "$(CC32)")" 
+CC32:="$(CC32)"
 
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
