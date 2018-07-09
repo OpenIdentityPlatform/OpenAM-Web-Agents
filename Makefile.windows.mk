@@ -70,7 +70,7 @@ else
  CFLAGS += /MT
 endif
 
-dCC32 :=cl.exe
+CC32 :=cmd /c "$(CC32)"
 dLINK32 :=link.exe
 	
 libopenam: $(OUT_OBJS)
