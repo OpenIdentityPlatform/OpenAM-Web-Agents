@@ -58,11 +58,11 @@ else
 ifdef 64
  LDFLAGS += /MACHINE:X64
  OS_MARCH := _64
- call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+ "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 else
  LDFLAGS += /MACHINE:X86
  OS_MARCH :=
- call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+ "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 endif
 endif
 
