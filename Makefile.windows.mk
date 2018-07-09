@@ -128,9 +128,6 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	    /PDB:build\mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.dll $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.pdb $(OBJDIR)$(PS)dist
-echo "$(CC)"
-echo "$(CC32)"
-echo "$(shell cygpath -u $(CC32))"
 
 $(OBJDIR)/64/%.$(OBJ): %.c
 	@$(ECHO) "[*** Compiling "$<" ***]"
