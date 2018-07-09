@@ -121,8 +121,6 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_32.dll$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
-	type source\\version.h
-	type $(OBJDIR)$(PS)version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
 	"${LINK32}" $(SHARED) /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) \
 	    $(OBJDIR)$(PS)version.res /OUT:build\mod_iis_openam_32.dll \

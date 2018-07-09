@@ -40,6 +40,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  MKDIR := cmd /c mkdir
  CP := cmd /c copy /E /Y
  CD := cd
+ CAT :=type
  EXEC := 
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
@@ -74,6 +75,7 @@ else
  UTAR=tar xf
  UBZIP=bunzip2
  WGET=wget
+ CAT=cat
 endif
 
 SED_ROPT := r
@@ -197,7 +199,7 @@ version:
 	    -e "s$(SUB)_VERSION_NUM_$(SUB)$(VERSION_NUM)$(SUB)g" \
 	    -e "s$(SUB)_CONTAINER_$(SUB)$(CONTAINER)$(SUB)g" \
 	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" < source$(PS)version.template > source$(PS)version.h
-
+	$(CAT) source$(PS)version.h
 clean:
 	-$(RMDIR) $(OBJDIR)
 	-$(RMALL) source$(PS)version.h
