@@ -193,12 +193,12 @@ build:
 version:
 	@$(ECHO) "[***** Updating version.h *****]"
 	-$(RMALL) source$(PS)version.h
-	$(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
+	$(CAT) source$(PS)version.template | $(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
 	    -e "s$(SUB)_IDENT_DATE_$(SUB)$(IDENT_DATE)$(SUB)g" \
 	    -e "s$(SUB)_BUILD_MACHINE_$(SUB)$(BUILD_MACHINE)$(SUB)g" \
 	    -e "s$(SUB)_VERSION_NUM_$(SUB)$(VERSION_NUM)$(SUB)g" \
 	    -e "s$(SUB)_CONTAINER_$(SUB)$(CONTAINER)$(SUB)g" \
-	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" < source$(PS)version.template > source$(PS)version.h
+	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" >> source$(PS)version.h
 	$(CAT) source$(PS)version.h
 clean:
 	-$(RMDIR) $(OBJDIR)
