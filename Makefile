@@ -35,7 +35,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OS_ARCH := WINNT
  RMALL := cmd /c del /F /Q
  RMDIR := cmd /c rmdir /S /Q
- SED := sed.exe
+ SED := cmd /c sed.exe
  ECHO := cmd /c echo
  MKDIR := cmd /c mkdir
  CP := cmd /c copy /E /Y
