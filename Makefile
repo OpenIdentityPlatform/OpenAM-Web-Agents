@@ -193,6 +193,8 @@ build:
 version:
 	@$(ECHO) "[***** Updating version.h *****]"
 	-$(RMALL) source$(PS)version.h
+	pwd
+	cmd /c $(CAT) source$(PS)version.template
 	$(CAT) source$(PS)version.template 
 	$(CAT) source$(PS)version.template | $(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
 	    -e "s$(SUB)_IDENT_DATE_$(SUB)$(IDENT_DATE)$(SUB)g" \

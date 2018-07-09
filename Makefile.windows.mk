@@ -13,7 +13,6 @@
 #
 # Copyright 2014 - 2016 ForgeRock AS.
 #
-SHELL := /bin/bash
 
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
