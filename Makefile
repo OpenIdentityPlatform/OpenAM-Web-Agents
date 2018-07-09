@@ -40,7 +40,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  MKDIR := cmd /c mkdir
  CP := cmd /c copy /E /Y
  CD := cd
- CAT :=type
+ CAT :=cat
  EXEC := 
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
