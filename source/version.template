@@ -29,7 +29,7 @@
 #ifdef __sun
 #pragma ident "@(#)am.h    _VERSION_    _IDENT_DATE_ Open Identity Platform Community"
 #else
-static char const rcsid[] = "$Id: am.h     _VERSION_   _IDENT_DATE_ Identity Platform Community Exp $";
+static char const rcsid[] = "$Id: am.h     _VERSION_   _IDENT_DATE_ Open Identity Platform Community Exp $";
 #endif
 
 #endif

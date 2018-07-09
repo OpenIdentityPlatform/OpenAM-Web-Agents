@@ -35,7 +35,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OS_ARCH := WINNT
  RMALL := cmd /c del /F /Q
  RMDIR := cmd /c rmdir /S /Q
- SED := cmd /c sed.exe
+ SED := sed.exe
  ECHO := cmd /c echo
  MKDIR := cmd /c mkdir
  CP := cmd /c copy /E /Y
@@ -193,6 +193,7 @@ build:
 version:
 	@$(ECHO) "[***** Updating version.h *****]"
 	-$(RMALL) source$(PS)version.h
+	$(CAT) source$(PS)version.template 
 	$(CAT) source$(PS)version.template | $(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
 	    -e "s$(SUB)_IDENT_DATE_$(SUB)$(IDENT_DATE)$(SUB)g" \
 	    -e "s$(SUB)_BUILD_MACHINE_$(SUB)$(BUILD_MACHINE)$(SUB)g" \
