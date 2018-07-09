@@ -70,8 +70,8 @@ else
  CFLAGS += /MT
 endif
 
-CC32 :=cl.exe
-LINK32 :=link.exe
+dCC32 :=cl.exe
+dLINK32 :=link.exe
 	
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
