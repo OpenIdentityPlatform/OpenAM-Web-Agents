@@ -71,12 +71,12 @@ else
  CFLAGS += /MT
 endif
 
-echo "$(CC)"
-echo "$(CC32)"
-echo "$(shell cygpath -u $(CC32))"
 #CC32 := cl
 #LINK32 :=link
-	
+	echo "$(CC)"
+	echo "$(CC32)"
+	echo "$(shell cygpath -u $(CC32))"	
+
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
 	-$(RMALL) $(OBJDIR)$(PS)version.*
@@ -108,7 +108,7 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libapr-1.lib extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libaprutil-1.lib \
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libhttpd.lib
 	
-iis:	version iis32 agentadmin_iis iisclean iis64   
+iis:	iis32 agentadmin_iis iisclean iis64   
 
 iisclean:
 	-$(RMALL) $(OBJDIR)$(PS)*
