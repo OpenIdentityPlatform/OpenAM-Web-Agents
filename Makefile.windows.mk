@@ -48,7 +48,7 @@ ifeq (,$(CC32))
 CC32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\cl.exe
 endif
 ifeq (,$(LINK32))
-LINK32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe
+LINK32 := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe
 endif
 ifeq (,$(LIB32_VC))
 LIB32_VC := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent | split-path -parent')
@@ -77,7 +77,7 @@ endif
 #CC32:="/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/VC/BIN/cl.exe"
 #CC32:="$(CC32)"
 CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\cl.exe
-LINK32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\link.exe
+LINK32:=$(shell cygpath "$(LINK32)")
 #LIB32_VC:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC
 
 libopenam: $(OUT_OBJS)
