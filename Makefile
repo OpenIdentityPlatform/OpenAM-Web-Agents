@@ -33,7 +33,7 @@ VERSION := 4.1.0
 
 ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OS_ARCH := WINNT
- RMALL := cmd /c del /F /Q
+ RMALL := del /F /Q
  RMDIR := cmd /c rmdir /S /Q
  SED := sed
  ECHO := echo
