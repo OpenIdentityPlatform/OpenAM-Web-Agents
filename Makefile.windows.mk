@@ -76,9 +76,9 @@ endif
 #CC32:="$(shell cygpath "$(CC32)")" 
 #CC32:="/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/VC/BIN/cl.exe"
 #CC32:="$(CC32)"
-CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\cl.exe
+CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\cl.exe
 #LINK32:=$(shell cygpath "$(LINK32)")
-LINK32 :=link
+LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 #LIB32_VC:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC
 
 libopenam: $(OUT_OBJS)
