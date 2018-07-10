@@ -75,8 +75,8 @@ CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\cl.exe
 LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
 LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Extension\ SDKs\WindowsMobile\10.0.10240.0\Lib\um\x86
-CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\x64\bin\cl.exe
-LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
+CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\cl.exe
+LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\link.exe
 
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
@@ -112,7 +112,7 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 iis:	iis32 agentadmin_iis iisclean iis64   
 
 iisclean:
-	-$(RMALL) $(OBJDIR)$(PS)*
+	-$(RMALL) $(OBJDIR)/*
 	-$(RMALL) $(OBJDIR)$(PS)expat$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)pcre$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
