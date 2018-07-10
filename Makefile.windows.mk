@@ -180,8 +180,8 @@ agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	"${LINK32}" /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) \
-	    $(ADMIN_OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb \
+	${LINK32} /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) \
+	    $(ADMIN_OUT_OBJS) $(OBJDIR)\version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb \
 	    $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
 	$(CP) $(OBJDIR)$(PS)agentadmin.pdb $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)agentadmin.exe $(OBJDIR)$(PS)dist
