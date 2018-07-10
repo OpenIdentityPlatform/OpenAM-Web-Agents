@@ -71,16 +71,11 @@ else
  CFLAGS += /MT
 endif
 
-#CC32 := cl
-#LINK32 :=link
-#CC32:="$(shell cygpath "$(CC32)")" 
-#CC32:="/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/VC/BIN/cl.exe"
-#CC32:="$(CC32)"
 CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\cl.exe
-#LINK32:=$(shell cygpath "$(LINK32)")
 LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
 LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Extension\ SDKs\WindowsMobile\10.0.10240.0\Lib\um\x86
+
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
 	-$(RMALL) $(OBJDIR)$(PS)version.*
@@ -121,7 +116,7 @@ iisclean:
 	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)source$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)source$(PS)iis$(PS)*
-	
+iis32: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86	
 iis32: CC = $(CC32)
 iis32: LDFLAGS += /MACHINE:X86
 iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
