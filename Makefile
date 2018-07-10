@@ -38,7 +38,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  SED := sed
  ECHO := echo
  MKDIR := cmd /c mkdir
- CP := cmd /c copy /E /Y
+ CP := cp -r 
  CD := cd
  CAT :=cat
  EXEC := 
