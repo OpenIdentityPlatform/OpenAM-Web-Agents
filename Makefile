@@ -53,7 +53,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  UTAR=7z x
  UBZIP=7z x
  WGET=powershell /c Invoke-WebRequest
- SHELL=powershell
+ SHELL:=powershell
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -201,7 +201,7 @@ version:
 	    -e "s$(SUB)_BUILD_MACHINE_$(SUB)$(BUILD_MACHINE)$(SUB)g" \
 	    -e "s$(SUB)_VERSION_NUM_$(SUB)$(VERSION_NUM)$(SUB)g" \
 	    -e "s$(SUB)_CONTAINER_$(SUB)$(CONTAINER)$(SUB)g" \
-	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" source$(PS)version.template >> source$(PS)version.h
+	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" source/version.template >> source/version.h
 	$(CAT) source$(PS)version.h
 clean:
 	-$(RMDIR) $(OBJDIR)
