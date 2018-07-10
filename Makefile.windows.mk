@@ -77,8 +77,9 @@ endif
 #CC32:="/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/VC/BIN/cl.exe"
 #CC32:="$(CC32)"
 CC32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\cl.exe
-LINK32:=$(shell cygpath "$(LINK32)")
-LIB32_VC:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC
+#LINK32:=$(shell cygpath "$(LINK32)")
+LINK32 :=link
+#LIB32_VC:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC
 
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
@@ -129,7 +130,7 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_32.dll$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	ls C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\
+	cmd /c dir  C:\Program Files (x86)\Microsoft\Visual Studio 14.0\VC\BIN\
 	${LINK32} $(SHARED) /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) $(OBJDIR)/version.res /OUT:build\mod_iis_openam_32.dll /PDB:build\mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.dll $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.pdb $(OBJDIR)$(PS)dist
