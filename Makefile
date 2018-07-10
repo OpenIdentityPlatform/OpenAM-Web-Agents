@@ -53,7 +53,6 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  UTAR=7z x
  UBZIP=7z x
  WGET=powershell /c Invoke-WebRequest
- SHELL:=powershell
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
