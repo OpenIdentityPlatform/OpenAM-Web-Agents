@@ -112,7 +112,7 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 iis:	iis32 agentadmin_iis iisclean iis64   
 
 iisclean:
-	-$(RMALL) $(OBJDIR)/*
+	-$(RMALL) $(OBJDIR)$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)expat$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)pcre$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
