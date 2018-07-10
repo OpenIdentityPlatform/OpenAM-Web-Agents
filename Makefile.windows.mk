@@ -77,7 +77,7 @@ endif
 #CC32:="/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/VC/BIN/cl.exe"
 #CC32:="$(CC32)"
 CC32:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\BIN\cl.exe
-LINK32:=C:\Program Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\BIN\link.exe
+LINK32:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\BIN\link.exe
 #LIB32_VC:=C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC
 
 libopenam: $(OUT_OBJS)
