@@ -23,9 +23,9 @@ HTTPD22_VERSION=2.2.34
 APR_VERSION=1.6.3
 APR_UTIL_VERSION=1.6.1
 
-#ifndef 32
-64 := 1
-#endif
+ifndef 32
+ 64 := 1
+endif
 
 # DEBUG=1
 
@@ -196,12 +196,12 @@ version:
 	pwd
 	cmd /c $(CAT) source$(PS)version.template
 	$(CAT) source$(PS)version.template 
-	$(CAT) source$(PS)version.template | $(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
+	$(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
 	    -e "s$(SUB)_IDENT_DATE_$(SUB)$(IDENT_DATE)$(SUB)g" \
 	    -e "s$(SUB)_BUILD_MACHINE_$(SUB)$(BUILD_MACHINE)$(SUB)g" \
 	    -e "s$(SUB)_VERSION_NUM_$(SUB)$(VERSION_NUM)$(SUB)g" \
 	    -e "s$(SUB)_CONTAINER_$(SUB)$(CONTAINER)$(SUB)g" \
-	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" >> source$(PS)version.h
+	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" < source$(PS)version.template > source$(PS)version.h
 	$(CAT) source$(PS)version.h
 clean:
 	-$(RMDIR) $(OBJDIR)
