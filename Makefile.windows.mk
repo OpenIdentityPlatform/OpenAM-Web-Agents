@@ -13,7 +13,6 @@
 #
 # Copyright 2014 - 2016 ForgeRock AS.
 #
-C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86
 
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
@@ -110,18 +109,19 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libapr-1.lib extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libaprutil-1.lib \
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libhttpd.lib
 	
-iis:	iis32 agentadmin_iis iisclean x64 iis64   
-
+x32:
+	C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86
 x64:
 	C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86_amd64
+iis:    x32 iis32 agentadmin_iis iisclean x64 iis64 
 
 iisclean:
-	-$(RMALL) $(OBJDIR)$(PS)*
-	-$(RMALL) $(OBJDIR)$(PS)expat$(PS)*
-	-$(RMALL) $(OBJDIR)$(PS)pcre$(PS)*
-	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
-	-$(RMALL) $(OBJDIR)$(PS)source$(PS)*
-	-$(RMALL) $(OBJDIR)$(PS)source$(PS)iis$(PS)*
+	-$(RMALL) $(OBJDIR)/*.*
+	-$(RMALL) $(OBJDIR)/expat/*
+	-$(RMALL) $(OBJDIR)/pcre/*
+	-$(RMALL) $(OBJDIR)/zlib/*
+	-$(RMALL) $(OBJDIR)/source/*
+	-$(RMALL) $(OBJDIR)/source/iis/*
 iis32: CC = $(CC32)
 iis32: LDFLAGS += /MACHINE:X86
 iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
