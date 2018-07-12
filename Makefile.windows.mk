@@ -112,9 +112,9 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 iis:	x32 iis32 agentadmin_iis iisclean x64 iis64   
 
 x32:
-	"C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+	C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat x86
 x64:
-	"C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+	C:\Program Files \(x86\)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat x86_amd64
 
 iisclean:
 	-$(RMALL) $(OBJDIR)$(PS)*
