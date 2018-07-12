@@ -112,7 +112,9 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 x32:
 	C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86
 x64:
+	C:\Program\ Files\Microsoft\ SDKs\Windows\v7.1\Bin\SetEnv.cmd /x64
 	C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86_amd64
+
 iis:    x32 iis32 agentadmin_iis iisclean x64 iis64 
 
 iisclean:
