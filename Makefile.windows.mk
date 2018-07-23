@@ -14,7 +14,7 @@
 # Copyright 2014 - 2016 ForgeRock AS.
 #
 
-res32 := $(shell cmd /c "\"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat\" x86")
+res32 := $(shell cmd /c '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86')
 
 ifndef	WINDOWS_MK_INCLUDED
 WINDOWS_MK_INCLUDED := true
