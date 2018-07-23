@@ -13,7 +13,7 @@
 #
 # Copyright 2014 - 2016 ForgeRock AS.
 #
-
+.EXPORT_ALL_VARIABLES
 res32 := $(shell C:\\Program\ Files\ \(x86\)\\Microsoft\ Visual\ Studio\ 14.0\\VC\\vcvarsall.bat x86)
 
 ifndef	WINDOWS_MK_INCLUDED
