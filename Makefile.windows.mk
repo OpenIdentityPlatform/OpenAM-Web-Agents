@@ -71,7 +71,7 @@ else
  CFLAGS += /MT
 endif
 
-CC32:=   cmd /c "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat x86"; cl.exe
+CC32:=   cmd /c "C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86"; cl.exe
 LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
 LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Extension\ SDKs\WindowsMobile\10.0.10240.0\Lib\um\x86
