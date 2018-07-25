@@ -71,6 +71,7 @@ else
  CFLAGS += /MT
 endif
 
+CC32:=cmd /c $(CC32)
 #CC32:=   cmd /c "C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86"; cl.exe
 #LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 #LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
