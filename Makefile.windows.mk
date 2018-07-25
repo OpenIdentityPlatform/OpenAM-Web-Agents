@@ -41,7 +41,7 @@ ifneq ($(findstring $(MAKECMDGOALS), iis32 iis64 iiszip),)
 LIB64ENV := $(shell echo "$(LIBPATH)" | findstr amd64)
 
 ifeq (,$(LIB64ENV))
-#$(error Missing support for 64 build environment)
+$(error Missing support for 64 build environment)
 endif
 
 ifeq (,$(CC32))
@@ -71,12 +71,12 @@ else
  CFLAGS += /MT
 endif
 
-CC32:=   cmd /c "C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86"; cl.exe
-LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
-LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
-LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Extension\ SDKs\WindowsMobile\10.0.10240.0\Lib\um\x86
-CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\cl.exe
-LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\link.exe
+#CC32:=   cmd /c "C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\ 14.0\VC\vcvarsall.bat x86"; cl.exe
+#LINK32 :=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
+#LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
+#LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Extension\ SDKs\WindowsMobile\10.0.10240.0\Lib\um\x86
+#CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\cl.exe
+#LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\link.exe
 
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
