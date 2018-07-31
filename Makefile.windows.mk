@@ -75,7 +75,7 @@ CC32:=  C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\cl.exe
 LINK32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
 LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Lib\10.0.14393.0\um
-#LIB32_UCRT=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\lib\10.0.10240.0\ucrt
+LIB32_UCRT=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\lib\10.0.14393.0\ucrt
 #CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\cl.exe
 #LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\link.exe
 
@@ -127,7 +127,7 @@ iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_32.dll$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	$(LINK32) $(SHARED) /LIBPATH:$(LIB32_SDK)\x86 /LIBPATH:$(LIB32_VC)\lib $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) $(OBJDIR)/version.res /OUT:build/mod_iis_openam_32.dll /PDB:build/mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
+	$(LINK32) $(SHARED) /LIBPATH:$(LIB32_SDK)\x86 /LIBPATH:$(LIB32_UCRT)\x86 /LIBPATH:$(LIB32_VC)\lib $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) $(OBJDIR)/version.res /OUT:build/mod_iis_openam_32.dll /PDB:build/mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.dll $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.pdb $(OBJDIR)$(PS)dist
 
@@ -175,7 +175,7 @@ agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	${LINK32} /LIBPATH:$(LIB32_SDK)\x86 /LIBPATH:$(LIB32_VC)\LIB $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)\version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
+	${LINK32} /LIBPATH:$(LIB32_SDK)\x86 /LIBPATH:$(LIB32_UCRT)\x86 /LIBPATH:$(LIB32_VC)\LIB $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)\version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
 	$(CP) $(OBJDIR)$(PS)agentadmin.pdb $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)agentadmin.exe $(OBJDIR)$(PS)dist
 
