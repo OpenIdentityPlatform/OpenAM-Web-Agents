@@ -41,7 +41,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  CP := cmd /c copy /Y
  CD := cd
  CAT :=cat
- EXEC :=./ 
+ EXEC :=./
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
  IDENT_DATE := $(shell powershell get-date -format "{dd.MM.yyyy}")
