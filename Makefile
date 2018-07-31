@@ -218,12 +218,12 @@ test_includes:
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
 apr:
-	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2 --O apr-${APR_VERSION}.tar.bz2
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2
 	-$(UBZIP) apr-${APR_VERSION}.tar.bz2; $(UTAR) apr-${APR_VERSION}.tar
-	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2 --O apr-util-${APR_UTIL_VERSION}.tar.bz2
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2
 	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2; $(UTAR) apr-util-${APR_UTIL_VERSION}.tar
 apache-src: apr
-	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2 --O httpd-${HTTPD24_VERSION}.tar.bz2
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD24_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD24_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24
@@ -232,7 +232,7 @@ apache-src: apr
 	-$(RMALL) httpd-* apr-*
 	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24; ./configure --with-included-apr
 apache22-src: apr
-	-$(CURL) https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2 --O httpd-${HTTPD22_VERSION}.tar.bz2
+	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD22_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD22_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22
