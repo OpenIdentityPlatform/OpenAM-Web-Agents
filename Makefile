@@ -226,20 +226,20 @@ apache-src: apr
 	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD24_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
-	-$(CP) httpd-${HTTPD24_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24
-	-$(CP) apr-${APR_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr
-	-$(CP) apr-util-${APR_UTIL_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr-util
+	-$(CP) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
+	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
+	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
-	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24; ./configure --with-included-apr
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24; ./configure --with-included-apr
 apache22-src: apr
 	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD22_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
-	-$(CP) httpd-${HTTPD22_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22
-	-$(CP) apr-${APR_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr
-	-$(CP) apr-util-${APR_UTIL_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr-util
+	-$(CP) httpd-${HTTPD22_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22
+	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
+	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
-	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; ./configure --with-included-apr
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22; ./configure --with-included-apr
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
 apachezip: clean build version apache-src apache agentadmin
