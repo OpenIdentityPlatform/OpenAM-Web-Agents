@@ -41,7 +41,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  CP := cmd /c copy /Y
  CD := cd
  CAT :=cat
- EXEC := 
+ EXEC :=./ 
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
  IDENT_DATE := $(shell powershell get-date -format "{dd.MM.yyyy}")
@@ -323,7 +323,7 @@ iiszip: clean build version iis
 	-$(CP) $(OBJDIR)$(PS)dist$(PS)mod_iis_openam* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)lib$(PS)
 	-$(CP) config$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)config$(PS)
 	-$(CP) legal$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)legal$(PS)
-	$(CD) $(OBJDIR) && $(OBJDIR)$(PS)agentadmin.exe --a IIS_$(OS_ARCH)_$(VERSION).zip web_agents
+	$(CD) $(OBJDIR) && $(EXEC)agentadmin.exe --a IIS_$(OS_ARCH)_$(VERSION).zip web_agents
 
 varnishzip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"4.1.x"'
 varnishzip: CONTAINER = $(strip Varnish 4.1.x $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
