@@ -18,7 +18,7 @@
 #  64=1 builds 64bit binary
 #  DEBUG=1 builds debug binary version
 
-HTTPD24_VERSION=2.4.33
+HTTPD24_VERSION=2.4.34
 HTTPD22_VERSION=2.2.34
 APR_VERSION=1.6.3
 APR_UTIL_VERSION=1.6.1
@@ -52,7 +52,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OBJ=obj
  UTAR=7z x
  UBZIP=7z x
- WGET=powershell /c Invoke-WebRequest
+ CURL=curl 
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -74,7 +74,7 @@ else
  OBJ=o
  UTAR=tar xf
  UBZIP=bunzip2
- WGET=wget
+ CURL=curl 
  CAT=cat
 endif
 
@@ -218,12 +218,12 @@ test_includes:
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
 apr:
-	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2
+	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2 --O apr-${APR_VERSION}.tar.bz2
 	-$(UBZIP) apr-${APR_VERSION}.tar.bz2; $(UTAR) apr-${APR_VERSION}.tar
-	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2
+	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2 --O apr-util-${APR_UTIL_VERSION}.tar.bz2
 	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2; $(UTAR) apr-util-${APR_UTIL_VERSION}.tar
 apache-src: apr
-	-$(WGET) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
+	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2 --O httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD24_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD24_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache24
@@ -232,7 +232,7 @@ apache-src: apr
 	-$(RMALL) httpd-* apr-*
 	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24; ./configure --with-included-apr
 apache22-src: apr
-	-$(WGET) https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
+	-$(CURL) https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2 --O httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD22_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD22_VERSION} extlib/$(OS_ARCH)_$(OS_MARCH)/apache22
@@ -324,6 +324,7 @@ iiszip: clean build version iis
 	-$(CP) config$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)config$(PS)
 	-$(CP) legal$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)legal$(PS)
 	$(CD) $(OBJDIR) && $(EXEC)agentadmin.exe --a IIS_$(OS_ARCH)_$(VERSION).zip web_agents
+	mv $(OBJDIR)/*.zip ./
 
 varnishzip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"4.1.x"'
 varnishzip: CONTAINER = $(strip Varnish 4.1.x $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
