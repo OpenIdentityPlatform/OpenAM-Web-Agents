@@ -230,7 +230,8 @@ apache-src: apr
 	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
 	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
-	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24; ./configure --Dwith-included-apr
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24; ./configure 
+#--with-included-apr
 apache22-src: apr
 	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2; $(UTAR) httpd-${HTTPD22_VERSION}.tar
