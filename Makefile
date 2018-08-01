@@ -239,7 +239,7 @@ apache22-src: apr
 	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
 	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
-	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22; ./configure --with-included-apr
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22; ./configure --Dwith-included-apr
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
 apachezip: clean build version apache-src apache agentadmin
