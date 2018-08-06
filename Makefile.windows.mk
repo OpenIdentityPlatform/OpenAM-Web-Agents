@@ -170,7 +170,7 @@ agentadmin_iis: CC = $(CC32)
 agentadmin_iis: LDFLAGS += /MACHINE:X86
 agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	@$(ECHO) "[*** Creating agentadmin binary ***]"
-	-$(RMALL) $(OBJDIR)$(PS)version.*
+	-$(RMALL) $(OBJDIR)/version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
