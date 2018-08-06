@@ -162,7 +162,7 @@ agentadmin: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source$(PS)version.rc.template >> $(OBJDIR)$(PS)version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
 	${LINK} $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\$@.exe /PDB:build\$@.pdb $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
 
