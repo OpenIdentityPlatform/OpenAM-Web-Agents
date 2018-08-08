@@ -39,6 +39,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  ECHO := echo
  MKDIR := cmd /c mkdir 
  CP := cmd /c copy /Y
+ MV : cmd /c move /Y 
  CD := cd
  CAT :=cat
  EXEC :=
@@ -61,7 +62,8 @@ else
  SED := sed
  ECHO := echo
  MKDIR := mkdir -p
- CP := cp -r
+ CP := cp -r 
+ MV :=mv -f  
  CD := cd
  EXEC := ./
  REVISION := Revision: $(shell git rev-parse --short HEAD)
@@ -229,22 +231,20 @@ apache-src: apr
 	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UTAR) httpd-${HTTPD24_VERSION}.tar
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)
-	-$(CP) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
+	-$(MV) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib
-	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
-	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
-	-$(RMALL) httpd-* apr-*
-	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24; ./configure --with-included-apr 
+	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
+	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24 && ./configure --with-included-apr 
 apache22-src: apr
 	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UTAR) httpd-${HTTPD22_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
-	-$(CP) httpd-${HTTPD22_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22
+	-$(MV) httpd-${HTTPD22_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib
-	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
-	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
-	-$(RMALL) httpd-* apr-*
+	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
+	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
 	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; ./configure --with-included-apr
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
