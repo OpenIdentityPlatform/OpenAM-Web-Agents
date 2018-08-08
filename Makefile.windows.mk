@@ -123,7 +123,7 @@ iis32: CC = $(CC32)
 iis32: LDFLAGS += /MACHINE:X86
 iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
-	-$(RMALL) $(OBJDIR)/version.*
+	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_32.dll$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
@@ -142,7 +142,7 @@ $(IIS_OUT_OBJS_64): COMPILEOPTS += /TP
 iis64: LDFLAGS += /MACHINE:X64
 iis64: $(OUT_OBJS_64) $(IIS_OUT_OBJS_64)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
-	-$(RMALL) $(OBJDIR)/version.*
+	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_64.dll$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
@@ -159,7 +159,7 @@ varnish3:
 	
 agentadmin: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" binary ***]"
-	-$(RMALL) $(OBJDIR)/version.*
+	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
@@ -170,7 +170,7 @@ agentadmin_iis: CC = $(CC32)
 agentadmin_iis: LDFLAGS += /MACHINE:X86
 agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	@$(ECHO) "[*** Creating agentadmin binary ***]"
-	-$(RMALL) $(OBJDIR)/version.*
+	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
@@ -182,7 +182,7 @@ agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 tests: CFLAGS += $(COMPILEFLAG)DUNIT_TEST
 tests: clean build version test_includes $(OUT_OBJS) $(TEST_OBJECTS) 
 	@$(ECHO) "[***** Building "$@" binary *****]"
-	-$(RMALL) $(OBJDIR)/version.*
+	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)test.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Test Utility\"$(SUB)g" \
 	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
