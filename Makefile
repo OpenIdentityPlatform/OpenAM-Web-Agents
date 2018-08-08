@@ -236,6 +236,9 @@ apache-src: apr
 	-$(MV) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib
 	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
+ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr && $(CURL) -O https://raw.githubusercontent.com/Alexpux/MINGW-packages/master/mingw-w64-apr/apr_ssize_t.patch && patch -p0 -i apr_ssize_t.patch
+endif
 	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
 	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24 && sh configure --with-included-apr $(CE)
 apache22-src: apr
