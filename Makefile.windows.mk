@@ -71,7 +71,7 @@ else
  CFLAGS += /MT
 endif
 
-CC32:=  C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\cl.exe
+CC32:=  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\cl.exe
 LINK32:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\link.exe
 LIB32_VC:=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC
 LIB32_SDK:=C:\Program\ Files\ \(x86\)\Windows\ Kits\10\Lib\10.0.14393.0\um
