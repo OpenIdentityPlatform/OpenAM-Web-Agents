@@ -53,7 +53,8 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OBJ=obj
  UTAR=cmd /c 7z x
  UBZIP=cmd /c 7z x
- CURL=cmd /c curl 
+ CURL=cmd /c curl
+ CE=--build=x86_64-pc-mingw32
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -78,6 +79,7 @@ else
  UBZIP=bunzip2
  CURL=curl 
  CAT=cat
+ CE=
 endif
 
 SED_ROPT := r
@@ -235,7 +237,7 @@ apache-src: apr
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib
 	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
 	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
-	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24 && ./configure --with-included-apr 
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24 && sh configure --with-included-apr $(CE)
 apache22-src: apr
 	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2
@@ -245,7 +247,7 @@ apache22-src: apr
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib
 	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
 	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
-	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; ./configure --with-included-apr
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; sh configure --with-included-apr $(CE)
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
 apachezip: clean build version apache-src apache agentadmin
