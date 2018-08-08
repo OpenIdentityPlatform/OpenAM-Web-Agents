@@ -39,7 +39,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  ECHO := echo
  MKDIR := cmd /c mkdir 
  CP := cmd /c copy /Y
- MV : cmd /c move /Y 
+ MV := cmd /c move /Y 
  CD := cd
  CAT :=cat
  EXEC :=
