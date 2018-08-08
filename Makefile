@@ -50,9 +50,9 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  COMPILEFLAG=/
  COMPILEOPTS=/Fd$@.pdb /Fo$(dir $@)
  OBJ=obj
- UTAR=7z x
- UBZIP=7z x
- CURL=curl 
+ UTAR=cmd /c 7z x
+ UBZIP=cmd /c 7z x
+ CURL=cmd /c curl 
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -218,7 +218,7 @@ test_includes:
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
 apr:
-	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2 -o apr-${APR_VERSION}.tar.bz2
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2
 	-$(UBZIP) apr-${APR_VERSION}.tar.bz2; $(UTAR) apr-${APR_VERSION}.tar
 	-$(CURL) --remote-name "http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2"
 	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2; $(UTAR) apr-util-${APR_UTIL_VERSION}.tar
