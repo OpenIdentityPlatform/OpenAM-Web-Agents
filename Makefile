@@ -218,7 +218,7 @@ test_includes:
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
 apr:
-	-$(CURL) --remote-name "http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2"
+	-$(CURL) http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2 -o apr-${APR_VERSION}.tar.bz2
 	-$(UBZIP) apr-${APR_VERSION}.tar.bz2; $(UTAR) apr-${APR_VERSION}.tar
 	-$(CURL) --remote-name "http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2"
 	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2; $(UTAR) apr-util-${APR_UTIL_VERSION}.tar
