@@ -33,12 +33,12 @@ VERSION := 4.1.0
 
 ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OS_ARCH := WINNT
- RMALL := rm -rf 
+ RMALL := cmd /c del /F /Q 
  RMDIR := cmd /c rmdir /S /Q
  SED := sed
  ECHO := echo
- MKDIR := mkdir 
- CP := cmd /c xcopy /s /e /y  
+ MKDIR := cmd /c mkdir 
+ CP := cmd /c xcopy /e /y  
  CD := cd
  CAT :=cat
  EXEC :=
