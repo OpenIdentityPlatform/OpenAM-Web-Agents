@@ -230,6 +230,7 @@ apache-src: apr
 	-$(UTAR) httpd-${HTTPD24_VERSION}.tar
 	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib
 	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
 	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
@@ -240,6 +241,7 @@ apache22-src: apr
 	-$(UTAR) httpd-${HTTPD22_VERSION}.tar
 	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD22_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib
 	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
 	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
 	-$(RMALL) httpd-* apr-*
