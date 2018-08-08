@@ -113,12 +113,12 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 iis:    iis32 agentadmin_iis iisclean iis64 
 
 iisclean:
-	-$(RMALL) $(OBJDIR)/*.*
-	-$(RMALL) $(OBJDIR)/expat/*
-	-$(RMALL) $(OBJDIR)/pcre/*
-	-$(RMALL) $(OBJDIR)/zlib/*
-	-$(RMALL) $(OBJDIR)/source/*
-	-$(RMALL) $(OBJDIR)/source/iis/*
+	-$(RMALL) $(OBJDIR)$(PS)*.*
+	-$(RMALL) $(OBJDIR)$(PS)expat$(PS)*
+	-$(RMALL) $(OBJDIR)$(PS)pcre$(PS)*
+	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
+	-$(RMALL) $(OBJDIR)$(PS)source$(PS)*
+	-$(RMALL) $(OBJDIR)$(PS)source$(PS)iis$(PS)*
 iis32: CC = $(CC32)
 iis32: LDFLAGS += /MACHINE:X86
 iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
