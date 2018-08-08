@@ -52,7 +52,7 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OBJ=obj
  UTAR=7z x
  UBZIP=7z x
- CURL=curl 
+ CURL=cmd /c curl 
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
