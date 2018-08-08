@@ -38,10 +38,10 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  SED := sed
  ECHO := echo
  MKDIR := mkdir 
- CP := cp -r 
+ CP := xcopy /s /e /y  
  CD := cd
  CAT :=cat
- EXEC :=./
+ EXEC :=
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
  IDENT_DATE := $(shell powershell get-date -format "{dd.MM.yyyy}")
