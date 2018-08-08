@@ -228,7 +228,7 @@ apache-src: apr
 	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2
 	-$(UTAR) httpd-${HTTPD24_VERSION}.tar
-	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)
 	-$(CP) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
 	-$(CP) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
 	-$(CP) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
