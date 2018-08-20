@@ -1,5 +1,5 @@
 --- srclib/apr/configure	2018-08-20 22:32:03.891461161 +0300
-+++ srclib/apr/configure.new	2018-08-20 22:30:16.843020164 +0300
++++ srclib/apr/configure	2018-08-20 22:30:16.843020164 +0300
 @@ -24542,10 +24542,6 @@
      ssize_t_fmt="ld"
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: %ld" >&5
