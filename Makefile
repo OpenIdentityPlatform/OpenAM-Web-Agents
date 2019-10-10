@@ -18,21 +18,31 @@
 #  64=1 builds 64bit binary
 #  DEBUG=1 builds debug binary version
 
-64=1
+HTTPD24_VERSION=2.4.34
+HTTPD22_VERSION=2.2.34
+APR_VERSION=1.6.3
+APR_UTIL_VERSION=1.6.1
+
+ifndef 32
+ 64 := 1
+endif
+
 # DEBUG=1
 
 VERSION := 4.1.0
 
 ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  OS_ARCH := WINNT
- RMALL := cmd /c del /F /Q
+ RMALL := cmd /c del /F /Q 
  RMDIR := cmd /c rmdir /S /Q
- SED := cmd /c sed.exe
- ECHO := cmd /c echo
- MKDIR := cmd /c mkdir
+ SED := sed
+ ECHO := echo
+ MKDIR := cmd /c mkdir 
  CP := cmd /c copy /Y
+ MV := cmd /c move /Y 
  CD := cd
- EXEC := 
+ CAT :=cat
+ EXEC :=
  REVISION := Revision: $(shell git rev-parse --short HEAD)
  BUILD_MACHINE := $(shell hostname)
  IDENT_DATE := $(shell powershell get-date -format "{dd.MM.yyyy}")
@@ -41,6 +51,10 @@ ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
  COMPILEFLAG=/
  COMPILEOPTS=/Fd$@.pdb /Fo$(dir $@)
  OBJ=obj
+ UTAR=cmd /c 7z x
+ UBZIP=cmd /c 7z x
+ CURL=cmd /c curl
+ CE=--build=x86_64-pc-mingw32
 else
  OS_ARCH := $(shell uname -s)
  OS_MARCH := $(shell uname -m)
@@ -49,7 +63,8 @@ else
  SED := sed
  ECHO := echo
  MKDIR := mkdir -p
- CP := cp
+ CP := cp -r 
+ MV :=mv -f  
  CD := cd
  EXEC := ./
  REVISION := Revision: $(shell git rev-parse --short HEAD)
@@ -60,6 +75,11 @@ else
  COMPILEFLAG=-
  COMPILEOPTS=-c -o $@
  OBJ=o
+ UTAR=tar xf
+ UBZIP=bunzip2
+ CURL=curl 
+ CAT=cat
+ CE=
 endif
 
 SED_ROPT := r
@@ -74,7 +94,9 @@ endif
 PS=$(strip $(PATHSEP))
 
 CFLAGS := $(COMPILEFLAG)I.$(PS)source $(COMPILEFLAG)I.$(PS)zlib $(COMPILEFLAG)I.$(PS)expat $(COMPILEFLAG)I.$(PS)pcre \
-	  $(COMPILEFLAG)DHAVE_EXPAT_CONFIG_H $(COMPILEFLAG)DHAVE_PCRE_CONFIG_H $(COMPILEFLAG)DAM_BINARY_LICENSE
+	  $(COMPILEFLAG)DHAVE_EXPAT_CONFIG_H $(COMPILEFLAG)DHAVE_PCRE_CONFIG_H
+
+DIR := ${CURDIR}
 OBJDIR := build
 
 APACHE_SOURCES := source/apache/agent.c
@@ -111,13 +133,15 @@ TEST_SOURCES := $(wildcard cmocka/*.c) $(wildcard tests/*.c)
 TEST_OBJECTS := $(addprefix $(OBJDIR)/,$(TEST_SOURCES:.c=.$(OBJ)))
 
 $(APACHE_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)$(OS_MARCH)/apache24/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)/apache24/include $(COMPILEFLAG)DAPACHE2 $(COMPILEFLAG)DAPACHE24
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr/include \
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/srclib/apr-util/include \
+        $(COMPILEFLAG)DAPACHE2 $(COMPILEFLAG)DAPACHE24
 $(VARNISH_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)/varnish/include
 $(VARNISH3_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)/varnish3/include
 $(APACHE22_OUT_OBJS): CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)$(OS_MARCH)/apache22/include \
-	$(COMPILEFLAG)Iextlib/$(OS_ARCH)/apache22$(VENDOR_EXT)/include $(COMPILEFLAG)DAPACHE2
+	$(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr/include \
+        $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/srclib/apr-util/include \
+	 $(COMPILEFLAG)DAPACHE2
 $(TEST_OBJECTS): CFLAGS += $(COMPILEFLAG)I.$(PS)cmocka $(COMPILEFLAG)I.$(PS)tests $(COMPILEFLAG)I.$(PS)$(OBJDIR)$(PS)tests \
 	$(COMPILEFLAG)DHAVE_SIGNAL_H $(COMPILEFLAG)DUNIT_TEST
 
@@ -173,13 +197,15 @@ build:
 version:
 	@$(ECHO) "[***** Updating version.h *****]"
 	-$(RMALL) source$(PS)version.h
+	pwd
+	$(CAT) source$(PS)version.template 
 	$(SED) -e "s$(SUB)_REVISION_$(SUB)$(REVISION)$(SUB)g" \
 	    -e "s$(SUB)_IDENT_DATE_$(SUB)$(IDENT_DATE)$(SUB)g" \
 	    -e "s$(SUB)_BUILD_MACHINE_$(SUB)$(BUILD_MACHINE)$(SUB)g" \
 	    -e "s$(SUB)_VERSION_NUM_$(SUB)$(VERSION_NUM)$(SUB)g" \
 	    -e "s$(SUB)_CONTAINER_$(SUB)$(CONTAINER)$(SUB)g" \
-	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" < source$(PS)version.template > source$(PS)version.h
-
+	    -e "s$(SUB)_VERSION_$(SUB)$(VERSION)$(SUB)g" source/version.template >> source/version.h
+	$(CAT) source$(PS)version.h
 clean:
 	-$(RMDIR) $(OBJDIR)
 	-$(RMALL) source$(PS)version.h
@@ -195,9 +221,41 @@ test_includes:
 	$(ECHO) "};" >> $(OBJDIR)$(PS)tests$(PS)tests.h
 	$(SED) -ie "s$(SUB)\"$(SUB) $(SUB)g" $(OBJDIR)$(PS)tests$(PS)tests.h
 
+apr:
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-${APR_VERSION}.tar.bz2
+	-$(UBZIP) apr-${APR_VERSION}.tar.bz2 
+	-$(UTAR) apr-${APR_VERSION}.tar
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2
+	-$(UBZIP) apr-util-${APR_UTIL_VERSION}.tar.bz2
+	-$(UTAR) apr-util-${APR_UTIL_VERSION}.tar
+apache-src: apr
+	-$(CURL) -O http://mirrors.ukfast.co.uk/sites/ftp.apache.org/httpd/httpd-${HTTPD24_VERSION}.tar.bz2
+	-$(UBZIP) httpd-${HTTPD24_VERSION}.tar.bz2
+	-$(UTAR) httpd-${HTTPD24_VERSION}.tar
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)
+	-$(MV) httpd-${HTTPD24_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib
+	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr
+ifneq ("$(PROGRAMFILES)$(ProgramFiles)","")
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr && $(CURL) -O https://raw.githubusercontent.com/Alexpux/MINGW-packages/master/mingw-w64-apr/apr_ssize_t.patch && patch -p0 -i apr_ssize_t.patch
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr && $(CURL) -O https://raw.githubusercontent.com/Alexpux/MINGW-packages/master/mingw-w64-apr/apr_wtypes.patch && patch -p0 -i apr_wtypes.patch
+	-$(CD) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24 && patch -p0 -i ..$(PS)..$(PS)..$(PS)apr.patch
+endif
+	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache24$(PS)srclib$(PS)apr-util
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache24 && sh configure --with-included-apr $(CE)
+apache22-src: apr
+	-$(CURL) -O https://archive.apache.org/dist/httpd/httpd-${HTTPD22_VERSION}.tar.bz2
+	-$(UBZIP) httpd-${HTTPD22_VERSION}.tar.bz2
+	-$(UTAR) httpd-${HTTPD22_VERSION}.tar
+	-$(MKDIR) extlib/$(OS_ARCH)_$(OS_MARCH)
+	-$(MV) httpd-${HTTPD22_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22
+	-$(MKDIR) extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib
+	-$(MV) apr-${APR_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr
+	-$(MV) apr-util-${APR_UTIL_VERSION} extlib$(PS)$(OS_ARCH)_$(OS_MARCH)$(PS)apache22$(PS)srclib$(PS)apr-util
+	-$(CD) extlib/$(OS_ARCH)_$(OS_MARCH)/apache22; sh configure --with-included-apr $(CE)
 apachezip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.4.x"'
 apachezip: CONTAINER = $(strip Apache 2.4 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
-apachezip: clean build version apache agentadmin
+apachezip: clean build version apache-src apache agentadmin
 	@$(ECHO) "[***** Building Apache 2.4 agent archive *****]"
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents$(PS)apache24_agent
@@ -223,7 +281,7 @@ apache22_post:
 
 apache22zip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"2.2.x"'
 apache22zip: CONTAINER = $(strip Apache 2.2 $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))
-apache22zip: clean build version apache22 agentadmin
+apache22zip: clean build version apache22-src apache22 agentadmin
 	@$(ECHO) "[***** Building Apache 2.2 agent archive *****]"
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents
 	-$(MKDIR) $(OBJDIR)$(PS)web_agents$(PS)apache22_agent
@@ -278,7 +336,8 @@ iiszip: clean build version iis
 	-$(CP) $(OBJDIR)$(PS)dist$(PS)mod_iis_openam* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)lib$(PS)
 	-$(CP) config$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)config$(PS)
 	-$(CP) legal$(PS)* $(OBJDIR)$(PS)web_agents$(PS)iis_agent$(PS)legal$(PS)
-	$(CD) $(OBJDIR) && $(EXEC)agentadmin --a IIS_$(OS_ARCH)_$(VERSION).zip web_agents
+	$(CD) $(OBJDIR) && $(EXEC)agentadmin.exe --a IIS_$(OS_ARCH)_$(VERSION).zip web_agents
+	mv $(OBJDIR)/*.zip ./
 
 varnishzip: CFLAGS += $(COMPILEFLAG)DSERVER_VERSION='"4.1.x"'
 varnishzip: CONTAINER = $(strip Varnish 4.1.x $(OS_ARCH)$(OS_ARCH_EXT) $(subst _,,$(OS_BITS)))

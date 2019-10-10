@@ -1,3 +1,5 @@
 httpd-*
 apr-*
 build
+extlib
+source/version.h

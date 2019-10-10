@@ -23,7 +23,6 @@ This project is licensed under the [Common Development and Distribution License 
 sudo apt-get install -qq -y libpcre3-dev libbz2-dev
 git clone --recursive  https://github.com/OpenIdentityPlatform/OpenAM-Web-Agents.git
 cd OpenAM-Web-Agents
-./prepare-apache.sh
 make apache22zip && ls build/*.zip
 make apachezip && ls build/*.zip
 ```
