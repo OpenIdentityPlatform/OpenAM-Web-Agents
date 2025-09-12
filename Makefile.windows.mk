@@ -38,7 +38,7 @@ $(IIS_OUT_OBJS): COMPILEOPTS += /TP
 $(TEST_OBJECTS): CFLAGS += /D HAVE_MSVC_THREAD_LOCAL_STORAGE /D HAVE__SNPRINTF_S /D HAVE__VSNPRINTF_S /D UNIT_TESTING_DEBUG=1
 
 ifneq ($(findstring $(MAKECMDGOALS), iis32 iis64 iiszip),)
-LIB64ENV := $(shell echo $(LIBPATH) | findstr amd64)
+LIB64ENV := $(shell echo "$(LIBPATH)" | findstr amd64)
 
 ifeq (,$(LIB64ENV))
 $(error Missing support for 64 build environment)
@@ -48,7 +48,7 @@ ifeq (,$(CC32))
 CC32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\cl.exe
 endif
 ifeq (,$(LINK32))
-LINK32 := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe
+LINK32 := $(shell powershell 'Get-Command link.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent')\link.exe
 endif
 ifeq (,$(LIB32_VC))
 LIB32_VC := $(shell powershell 'Get-Command cl.exe | Where-Object {$$_.Definition -like "*amd64*"} | Select-Object -ExpandProperty Definition | split-path -parent | split-path -parent | split-path -parent')
@@ -64,17 +64,26 @@ else
 endif
 endif
 
+
 ifdef DEBUG
  CFLAGS += /MTd /D _DEBUG /D DEBUG
 else
  CFLAGS += /MT
 endif
-	
+
+CC32:=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\cl.exe
+LINK32:=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe
+LIB32_VC:=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
+LIB32_SDK:=C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\um
+LIB32_UCRT=C:\Program Files (x86)\Windows Kits\10\lib\10.0.14393.0\ucrt
+#CC=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\cl.exe
+#LINK=C:\Program\ Files\ \(x86\)\Microsoft\ Visual\ Studio\ 14.0\VC\bin\x86_amd64\link.exe
+
 libopenam: $(OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)libopenam.dll$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
 	${LINK} $(SHARED) $(LDFLAGS) $(OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\$@.dll /PDB:build\$@.pdb \
 	    $(LIBS)
@@ -101,27 +110,24 @@ apache22: apache22_pre $(OUT_OBJS) $(APACHE22_OUT_OBJS) apache22_post
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libapr-1.lib extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libaprutil-1.lib \
 	    extlib/$(OS_ARCH)$(OS_MARCH)/apache22/lib/libhttpd.lib
 	
-iis:	iis32 agentadmin_iis iisclean iis64   
+iis:    iis32 agentadmin_iis iisclean iis64 
 
 iisclean:
-	-$(RMALL) $(OBJDIR)$(PS)*
+	-$(RMALL) $(OBJDIR)$(PS)*.*
 	-$(RMALL) $(OBJDIR)$(PS)expat$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)pcre$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)zlib$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)source$(PS)*
 	-$(RMALL) $(OBJDIR)$(PS)source$(PS)iis$(PS)*
-	
 iis32: CC = $(CC32)
 iis32: LDFLAGS += /MACHINE:X86
 iis32: $(OUT_OBJS) $(IIS_OUT_OBJS)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_32.dll$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	"${LINK32}" $(SHARED) /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) \
-	    $(OBJDIR)$(PS)version.res /OUT:build\mod_iis_openam_32.dll \
-	    /PDB:build\mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
+	$(LINK32) $(SHARED) /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_UCRT)\x86" /LIBPATH:"$(LIB32_VC)\lib" $(LDFLAGS) $(OUT_OBJS) $(IIS_OUT_OBJS) $(OBJDIR)/version.res /OUT:build/mod_iis_openam_32.dll /PDB:build/mod_iis_openam_32.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.dll $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_32.pdb $(OBJDIR)$(PS)dist
 
@@ -138,10 +144,9 @@ iis64: $(OUT_OBJS_64) $(IIS_OUT_OBJS_64)
 	@$(ECHO) "[*** Creating "$@" shared library ***]"
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)mod_iis_openam_64.dll$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_DLL$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	${LINK} $(SHARED) $(LDFLAGS) $(OUT_OBJS_64) $(IIS_OUT_OBJS_64) $(OBJDIR)$(PS)version.res /OUT:build\mod_iis_openam_64.dll \
-	    /PDB:build\mod_iis_openam_64.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
+	${LINK} $(SHARED) $(LDFLAGS) $(OUT_OBJS_64) $(IIS_OUT_OBJS_64) $(OBJDIR)\version.res /OUT:build\mod_iis_openam_64.dll /PDB:build\mod_iis_openam_64.pdb $(LIBS) /EXPORT:RegisterModule oleaut32.lib
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_64.dll $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)mod_iis_openam_64.pdb $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)dist$(PS)agentadmin.exe $(OBJDIR)$(PS)
@@ -157,10 +162,9 @@ agentadmin: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	${LINK} $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\$@.exe /PDB:build\$@.pdb \
-	    $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
+	${LINK} $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\$@.exe /PDB:build\$@.pdb $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
 
 agentadmin_iis: CC = $(CC32)
 agentadmin_iis: LDFLAGS += /MACHINE:X86
@@ -169,11 +173,9 @@ agentadmin_iis: $(OUT_OBJS) $(ADMIN_OUT_OBJS)
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)agentadmin.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Administration Utility\"$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
-	"${LINK32}" /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) \
-	    $(ADMIN_OUT_OBJS) $(OBJDIR)$(PS)version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb \
-	    $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
+	${LINK32} /LIBPATH:"$(LIB32_SDK)\x86" /LIBPATH:"$(LIB32_UCRT)\x86" /LIBPATH:"$(LIB32_VC)\LIB" $(LDFLAGS) $(OUT_OBJS) $(ADMIN_OUT_OBJS) $(OBJDIR)\version.res /OUT:build\agentadmin.exe /PDB:build\agentadmin.pdb $(LIBS) ole32.lib oleaut32.lib ahadmin.lib
 	$(CP) $(OBJDIR)$(PS)agentadmin.pdb $(OBJDIR)$(PS)dist
 	$(CP) $(OBJDIR)$(PS)agentadmin.exe $(OBJDIR)$(PS)dist
 
@@ -183,7 +185,7 @@ tests: clean build version test_includes $(OUT_OBJS) $(TEST_OBJECTS)
 	-$(RMALL) $(OBJDIR)$(PS)version.*
 	$(SED) -e "s$(SUB)_FILE_NAME_$(SUB)test.exe$(SUB)g" \
 	       -e "s$(SUB)DESCRIPTION$(SUB)\"OpenAM Web Agent Test Utility\"$(SUB)g" \
-	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g" < source$(PS)version.rc.template > $(OBJDIR)$(PS)version.rc
+	       -e "s$(SUB)_FILE_TYPE_$(SUB)VFT_APP$(SUB)g"  source/version.rc.template >> $(OBJDIR)/version.rc
 	$(RC)  /l 0x0409 /nologo /fo $(OBJDIR)$(PS)version.res $(OBJDIR)$(PS)version.rc
 	${LINK} $(LDFLAGS) $(OUT_OBJS) $(TEST_OBJECTS) $(OBJDIR)$(PS)version.res /OUT:build$(PS)test.exe $(LIBS)
 	

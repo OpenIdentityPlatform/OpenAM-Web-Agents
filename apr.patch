@@ -1,0 +1,24 @@
+--- srclib/apr/configure	2017-10-18 17:50:19.000000000 +0300
++++ srclib/apr/configure	2018-08-20 23:36:43.195893125 +0300
+@@ -24542,6 +24542,10 @@
+     ssize_t_fmt="ld"
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: %ld" >&5
+ $as_echo "%ld" >&6; }
++elif test "$ac_cv_sizeof_ssize_t" = "$ac_cv_sizeof_long_long"; then
++    ssize_t_fmt="lld"
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: %lld" >&5
++$as_echo "%lld" >&6; }
+ else
+     as_fn_error $? "could not determine the proper format for apr_ssize_t" "$LINENO" 5
+ fi
+@@ -24605,6 +24609,10 @@
+     size_t_fmt="ld"
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: %ld" >&5
+ $as_echo "%ld" >&6; }
++elif test "$ac_cv_sizeof_size_t" = "$ac_cv_sizeof_long_long"; then
++    size_t_fmt="lld"
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: %lld" >&5
++$as_echo "%lld" >&6; }
+ else
+     as_fn_error $? "could not determine the proper format for apr_size_t" "$LINENO" 5
+ fi

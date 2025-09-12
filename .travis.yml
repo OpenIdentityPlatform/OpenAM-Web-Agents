@@ -69,9 +69,6 @@ before_install:
   - env | sort
   - git log `git describe --tags --abbrev=0 HEAD^ --always`..HEAD --oneline 
   
-install:
-  - ./prepare-apache.sh
-
 script:
   - sed -i 's#4\.1\.0#'"${git_version}"'#g' Makefile
   - make apache22zip && mv build/*.zip .

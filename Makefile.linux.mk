@@ -22,7 +22,7 @@ SHARED := -shared
 
 CFLAGS  += -fPIC -pthread -std=gnu99 -D_REENTRANT -DLINUX -D_GNU_SOURCE -D_FORTIFY_SOURCE=2 -fstack-protector-all \
 	    -Wno-unused-value -Wno-deprecated-declarations
-	
+
 ifdef DEBUG
  CFLAGS += -g3 -fno-inline -O0 -DDEBUG -Wall
 else
@@ -36,6 +36,8 @@ else
  CFLAGS += -m32 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
  LDFLAGS += -m32
 endif
+
+CFLAGS += $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache24/os/unix $(COMPILEFLAG)Iextlib/$(OS_ARCH)_$(OS_MARCH)/apache22/os/unix
 
 LDFLAGS += -Wl,-rpath,'$$ORIGIN/../lib' -Wl,-rpath,'$$ORIGIN' -Wl,--no-as-needed -Wl,-z,now -Wl,-z,relro  -lpthread -lresolv -lrt -ldl
 
